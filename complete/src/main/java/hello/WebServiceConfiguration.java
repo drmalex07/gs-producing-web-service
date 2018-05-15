@@ -14,8 +14,8 @@ import org.springframework.xml.xsd.XsdSchema;
 
 @EnableWs
 @Configuration
-public class WebServiceConfiguration extends WsConfigurerAdapter {
-	
+public class WebServiceConfiguration extends WsConfigurerAdapter 
+{    
     @Bean
 	public ServletRegistrationBean<?> messageDispatcherServlet(ApplicationContext applicationContext) 
     {
@@ -32,11 +32,16 @@ public class WebServiceConfiguration extends WsConfigurerAdapter {
 	public DefaultWsdl11Definition countriesService(XsdSchema countriesSchema) 
 	{
 		DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
-		wsdl11Definition.setPortTypeName("CountriesPort");
-		wsdl11Definition.setServiceName("CountriesService");
-		wsdl11Definition.setLocationUri("/ws");
-		wsdl11Definition.setTargetNamespace("http://spring.io/guides/gs-producing-web-service");
+		
+		wsdl11Definition.setPortTypeName(CountryEndpoint.SERVICE_PORT_NAME);
+		wsdl11Definition.setServiceName(CountryEndpoint.SERVICE_NAME);
+		wsdl11Definition.setTargetNamespace(CountryEndpoint.NAMESPACE_URI);
 		wsdl11Definition.setSchema(countriesSchema);
+		
+		// Note: The following sets the soap:address value under WSDL. 
+		// It is probably better to let it empty (otherwise it will advertize internal URLs)
+		//wsdl11Definition.setLocationUri("/ws");
+		
 		return wsdl11Definition;
 	}
 
