@@ -14,20 +14,26 @@ import org.springframework.xml.xsd.XsdSchema;
 
 @EnableWs
 @Configuration
-public class WebServiceConfig extends WsConfigurerAdapter {
+public class WebServiceConfiguration extends WsConfigurerAdapter {
 	
     @Bean
-	public ServletRegistrationBean<?> messageDispatcherServlet(ApplicationContext applicationContext) {
+	public ServletRegistrationBean<?> messageDispatcherServlet(ApplicationContext applicationContext) 
+    {
 		MessageDispatcherServlet servlet = new MessageDispatcherServlet();
 		servlet.setApplicationContext(applicationContext);
 		servlet.setTransformWsdlLocations(true);
 		return new ServletRegistrationBean<>(servlet, "/ws/*");
 	}
 
+    // Note: The name of the Wsdl11Definition bean will be the one used for the WSDL document
+    // e.g. http://localhost:8080/ws/countriesService.wsdl
+    
 	@Bean
-	public DefaultWsdl11Definition countriesServiceDefinition(XsdSchema countriesSchema) {
+	public DefaultWsdl11Definition countriesService(XsdSchema countriesSchema) 
+	{
 		DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
 		wsdl11Definition.setPortTypeName("CountriesPort");
+		wsdl11Definition.setServiceName("CountriesService");
 		wsdl11Definition.setLocationUri("/ws");
 		wsdl11Definition.setTargetNamespace("http://spring.io/guides/gs-producing-web-service");
 		wsdl11Definition.setSchema(countriesSchema);
@@ -35,7 +41,8 @@ public class WebServiceConfig extends WsConfigurerAdapter {
 	}
 
 	@Bean
-	public XsdSchema countriesSchema() {
+	public XsdSchema countriesSchema() 
+	{
 		return new SimpleXsdSchema(new ClassPathResource("countries.xsd"));
 	}
 }
