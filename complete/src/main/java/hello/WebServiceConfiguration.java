@@ -39,8 +39,8 @@ public class WebServiceConfiguration extends WsConfigurerAdapter
 		wsdl11Definition.setSchema(countriesSchema);
 		
 		// Note: The following sets the soap:address value under WSDL. 
-		// It is probably better to let it empty (otherwise it will advertize internal URLs)
-		//wsdl11Definition.setLocationUri("/ws");
+		// The host part will be derived by the "Host" header of each request
+		wsdl11Definition.setLocationUri("/ws");
 		
 		return wsdl11Definition;
 	}
